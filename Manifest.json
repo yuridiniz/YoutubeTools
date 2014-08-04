@@ -3,6 +3,7 @@
     "manifest_version": 2,
 	"author": "Yuri Araujo",
 	"description": "Adiciona ferramentas ao Youtube",
+	"update_url": "https://rawgit.com/yuridiniz/YoutubeTools/master/update.xml",
 	"content_scripts": [ {
         "matches": ["https://*.youtube.com/*",
 			"http://*.youtube.com/*",
