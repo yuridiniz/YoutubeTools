@@ -1,17 +1,25 @@
 {   "name": "Youtube Tools",
-    "version": "0.7",
-    "manifest_version": 2,
+    "version": "0.8.1",
+    "manifest_version": 3,
 	"author": "Yuri Araujo",
 	"description": "Adiciona ferramentas ao Youtube",
 	"key" : "ndepcgdphcghhheobcfboapkkbhjiglo",
+	"permissions": [
+		"notifications",
+		"http://*/*"
+	  ],
 	"content_scripts": [ {
         "matches": ["https://*.youtube.com/*",
 			"http://*.youtube.com/*",
 			"https://*.youtube.com.br/*",
 			"http://*.youtube.com.br/*"
 			],
-        "js": ["engine.js"]
-    }
-]
+        "js": ["content.js"]
+		}
+	],
+	"background": {
+		"scripts": ["engine.js"],
+		"persistent": false // add this line if you use event page.
+	}
 
 }

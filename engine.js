@@ -1,38 +1,40 @@
+/*
+* Cria um ouvinte de mensagens, recebe as mensagens enviada pelos content_scripts e exibe o rich notification
+*
+*/
+chrome.runtime.onMessage.addListener(function(msg, sender) {
 
-function remover()
+	
+    if(msg.from == undefined) return;
+    if(msg.body == undefined) return;
+    if(msg.title == undefined) return;
+
+    chrome.notifications.create('0',{
+		  type:'basic',
+		  title:msg.title,
+		  iconUrl: 'http://www.rfimasters.com/wp-content/uploads/2013/09/warning_notification-1331px-300x289.png',
+		  message: msg.body,
+		  expandedMessage:'Não esqueça de efetuar uma colaboração :p',
+		  priority:1,
+		  isClickable:true
+		},function(id){
+			console.error(chrome.runtime.lastError)
+		});
+});
+
+chrome.runtime.onUpdateAvailable
+
+chrome.runtime.onUpdateAvailable.addListener(function(e,v)
 {
-try
+console.log(e)
+console.log(v)
+});
+
+var x = chrome.runtime.requestUpdateCheck(function(e)
 {
+console.log(e)
+});
 
-if(window.location.href.indexOf("youtube.com") > -1)
-	if(document.querySelector(".videoAdUiSkipButton") == null)
-	{
-		setTimeout(function() {remover()},300);
-		return 
-	}
-	
-	document.querySelector(".html5-main-video").currentTime = 10
+console.log(x)
 
-	setTimeout(function()
-	{
-
-	ev = document.createEvent("MouseEvents");
-    ev.initMouseEvent("click", true, false, window,0,0,0,0,0,false,false,false,false,2,null);
-    document.querySelector(".videoAdUiSkipButton").dispatchEvent(ev);
-	
-	setTimeout(function() {remover()},3000);
-	
-	
-	},20)
-	
-	
-}catch(e)
-{
-setTimeout(function()
-{
-remover()
-},1000);
-}
-}
-
-remover()
+console.log(chrome.runtime)
