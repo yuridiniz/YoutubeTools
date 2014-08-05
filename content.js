@@ -7,6 +7,17 @@ var verificarAtualizacao = function(){
 		body: "Ads do youtube acabou de ser removido"
 	});
 }
+var removerAdsDeVideo = function() {
+    var ads = document.querySelector(".ad-container");
+    if (ads != null) {
+        ads.style.opacity = 0
+    } else {
+        setTimeout(function () {
+            removerAdsDeVideo()
+        },1000)
+    }
+
+}
 
 var remover = function(buscando) {
     try {
@@ -26,12 +37,11 @@ var remover = function(buscando) {
 
             } else {
                 if (document.querySelector(".videoAdUiSkipButton") == null) {
-                    setTimeout(function() { remover() }, 2000);
+                    setTimeout(function() { remover() }, 1000);
                     return;
                 } else {
                     
                 executarClick();
-
                     if (document.querySelector(".videoAdUi") == null) {
                         setTimeout(function() {
                             remover();
@@ -110,20 +120,6 @@ var autoReplay = function () {
     var painelControle = document.querySelector(".html5-player-chrome")
     var painelModais = document.querySelector(".html5-video-controls");
 
-    var divControle = document.createElement("div");
-    divControle.setAttribute("class", "ytp-button ytp-button-watch-later");
-    divControle.setAttribute("role", "button");
-    divControle.setAttribute("aria-label", "YouTube Tools");
-    divControle.setAttribute("id", "OpenWindowController");
-    painelControle.appendChild(divControle)
-
-
-    var divOpcoes = document.createElement("div");
-    divOpcoes.setAttribute("class", "ytp-menu-html5-stop-propagation classeTeste");
-    divOpcoes.setAttribute("style", "height: 100px;background: rgba(0,0,0,0.5);border: 1px solid #00A0EA;top: 0;display: block;");
-
-    painelModais.insertBefore(divOpcoes, painelModais.childNodes[0]);
-
 
     var div = document.createElement("div");
     div.style.position = "fixed";
@@ -163,11 +159,6 @@ var autoReplay = function () {
     div.appendChild(textInicio)
     div.appendChild(txtFim)
     div.appendChild(button1)
-
-
-    document.querySelector("#OpenWindowController").addEventListener("click", function () {
-
-    }, true);
 
 
     document.querySelector("#controle-tools button").addEventListener("click", function () {
@@ -237,3 +228,5 @@ var autoReplay = function () {
 autoReplay();
 remover();
 verificarAtualizacao()
+removerAdsDeVideo();
+
