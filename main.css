@@ -1,0 +1,203 @@
+/*
+* Estilo dos anuncios do facebook
+*/
+.ad-container {
+    opacity: 0!important;
+}
+
+
+
+/*
+* Parte do css reponsivael por estilizar o content
+* do dialogo de mensagens
+* Todo conteudo a baixo deve ser comentado
+*/
+
+
+/*
+* Estilo do content de tudo
+*/
+body div.projectnetwork#parent {
+    font-family: arial!important;
+    -webkit-user-select: none!important;   
+    user-select: none!important;   
+    -webkit-perspective: 390px;
+    position:fixed;
+    z-index:9999999999;
+    display: none;
+    bottom:20px;
+    right:20px;
+    width:380px;
+    height:153px;
+}
+
+/*
+* Estilo da content de dialogo
+*/
+.projectnetwork#dialogo-mensagem{
+    
+    box-shadow:1px 1px 7px 2px #CCC;
+    background-color:#555;
+    border: 1px solid #111;
+}
+
+/*
+* Adiciona animação de dialogo
+*/
+.projectnetwork#dialogo-mensagem.animacao,
+.projectnetwork#parent.animacao{
+    display:block;
+    opacity:0;
+    -webkit-transform: rotateX(-50deg);
+    -webkit-transition: 0.2s;
+}
+
+/*
+* classe para abrir o content
+*/
+.projectnetwork#dialogo-mensagem.aberto,
+.projectnetwork#parent.aberto{
+    opacity:1;
+    -webkit-transform: rotateX(0deg);
+}
+
+/*
+* Estilo para menu de ferramentas
+*/
+.projectnetwork#dialogo-mensagem #menu-ferramentas,
+.projectnetwork#dialogo-mensagem #menu-ferramentas li {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.projectnetwork#dialogo-mensagem #menu-ferramentas li{
+    border: 1px solid #777;
+    display: inline-block;
+    padding: 5px 11px;
+    border-top-width: 0px;
+    color: #EEE;
+    background: #444;
+    -webkit-transition: 0.2s;
+    cursor: pointer;
+    border-left-width: 0px;
+    font-weight: bold;
+    font-size: 11px;
+}
+
+.projectnetwork#dialogo-mensagem #menu-ferramentas li:hover{
+    background: #4797D6;
+
+}
+
+.projectnetwork#dialogo-mensagem #menu-ferramentas li:first-child {
+    border-top-width: 0px;
+    border-left-width: 0px;
+}
+
+.projectnetwork#dialogo-mensagem #menu-ferramentas li:last-child{
+}
+
+
+
+/*
+* dos componentes
+*/
+.projectnetwork input:focus {
+    outline: none;
+}
+.projectnetwork button:focus {
+    outline: none;
+}
+.projectnetwork-input-label {
+    color: white;
+    font-size: 10px;
+    display: inline-block;
+    padding: 7px 0px;
+}
+
+.projectnetwork-input-val {
+   background: #999;
+   border: 1px solid #444;
+   margin: 6px;
+}
+
+.projectnetwork-button {
+   margin-top: 32px;
+    width: 159px;
+    background: #444;
+    border: 2px solid #333;
+    color: #FFF;
+    font-weight: bold;
+    text-transform: uppercase;
+    font-size: 11px;
+    padding: 2px;
+    cursor: pointer;
+    -webkit-transition: 0.2s;
+}
+
+.projectnetwork-button:hover {
+    background: #595959;
+}
+
+
+.projectnetwork-button.ativo {
+    background: #4797D6;
+}
+
+.projectnetwork-button.ativo:hover {
+    background: #4797D6;
+}
+
+
+/*
+* Do conteudo da ferramenta
+*/
+.projectnetwork.conteudo-ferramentas {
+    height: 110px;
+    padding: 8px;
+}
+
+.projectnetwork#rodape-ferramentas {
+    /*height: 22px;
+    background: #444*/
+}
+
+
+
+
+/*
+* Cols
+*/
+
+.projectnetwork .col-1 {
+    width: 9.9%;
+    float:left;
+}
+.projectnetwork .col-2 {
+    width: 19.8%;
+    float:left;
+}
+.projectnetwork .col-3 {
+    width: 29.8%;
+    float:left;
+}
+.projectnetwork .col-4 {
+    width: 39.8%;
+    float:left;
+}
+
+.projectnetwork .col-5 {
+    width: 49.9%;
+    float:left;
+}
+
+.projectnetwork .col-6 {
+    width: 59.9%;
+    float:left;
+}
+
+.projectnetwork .col-7 {
+    width: 69.9%;
+    float:left;
+}
