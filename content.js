@@ -12,7 +12,7 @@ var ProjectNetwork = {
     Iniciar: function () {
         ProjectNetwork.AdicionarOuvinte()
         ProjectNetwork.InserirStyleSheet();
-        ProjectNetwork.VerificarAtualizacao();
+        //ProjectNetwork.VerificarAtualizacao();
         //ProjectNetwork.RemoverAdsDeVideo();
         ProjectNetwork.VerificaExistenciaDeAnuncio();
         ProjectNetwork.AutoReplay.Iniciar();
@@ -27,8 +27,8 @@ var ProjectNetwork = {
             ProjectNetwork.Socket.postMessage({
                 callback: "AbrirAlerta",
                 from: "VerificaFlash",
-                title: "Video em flash",
-                body: "Infelizmente o video atual é um flash, o YouTube Tools não conseguira exercer nenhuma ação!",
+                title: "Youtube™ Tools",
+                body: "Infelizmente o video atual é um flash, o YouTube Tools não conseguirá exercer nenhuma ação!",
                 id: Date.now()
             });
 
@@ -180,7 +180,7 @@ var ProjectNetwork = {
             ProjectNetwork.Socket.postMessage({
                 callback: "AbrirAlerta",
                 from: "executarClick",
-                title: "Ads removido",
+                title: "Youtube™ Tools",
                 body: "Ads do youtube acabou de ser removido",
                 id: Date.now()
             });
@@ -307,7 +307,7 @@ var ProjectNetwork = {
                     chrome.runtime.sendMessage({
                         callBack: "AbrirAlerta",
                         from: "autoReplay",
-                        title: "Valores invalidos",
+                        title: "Youtube™ Tools",
                         body: erro.message
                     });
                 }
@@ -332,7 +332,7 @@ var ProjectNetwork = {
         */
         _ObterHtmlMenu : function() {
             var html = "<li class='ativo'>REPLAY</li>";
-            html += "<li>VERSAO</li>";
+            html += "<li>VERSÃO</li>";
             html += "<li>SOBRE</li>";
             html += "<li class='espaco-vazio'><span>a</span></li>";
             return html
@@ -343,13 +343,13 @@ var ProjectNetwork = {
         */
         _ObterHtmlReplay : function() {
             var html = "<div class='col-3'>";
-            html += "<span class='projectnetwork-input-label'> Inicio do video </span>";
+            html += "<span class='projectnetwork-input-label'> Inicio do vídeo </span>";
             html += "</div>";
             html += "<div class='col-7'>";
             html += "<input id='projectnetwork-ini-video' class='projectnetwork-input-val' />";
             html += "</div>";
             html += "<div class='col-3'>";
-            html += "<span class='projectnetwork-input-label'> Final do video </span>";
+            html += "<span class='projectnetwork-input-label'> Final do vídeo </span>";
             html += "</div>";
             html += "<div class='col-7'>";
             html += "<input id='projectnetwork-fim-video' class='projectnetwork-input-val' />";
@@ -394,8 +394,8 @@ var ProjectNetwork = {
                 ProjectNetwork.Socket.postMessage({
                     callback: "AbrirAlerta",
                     from: "autoReplay",
-                    title: "Video não encontrado",
-                    body: "Não e possivel abrir o painel para essa pagina"
+                    title: "Youtube™ Tools",
+                    body: "Não é possível abrír o painel para essa página"
                 });
 
             }

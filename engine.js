@@ -54,8 +54,8 @@ var AtualizarYoutubeTools = function(versao)
     AbrirAlerta({
         id:"NovaVersao",
 		from : "engine",
-		title : "Youtube tools",
-		body : "Ha uma versao mais recente disponivel: " + versao.version.toString(),
+		title : "Youtube™ Tools",
+		body : "Ha uma versão disponível: " + versao.version.toString(),
 		btnList : [ { title : "Iniciar download"}]
 		});
 }
@@ -70,12 +70,15 @@ var AbrirAlerta = function(msg) {
 
 	msg.id = msg.id.toString()
 
+	chrome.notifications.clear(msg.id, function(e) {
+	    console.log(e)
+	});
+
     chrome.notifications.create(msg.id, {
         type: 'basic',
         title: msg.title,
         iconUrl: chrome.extension.getURL('icon128.png'),
         message: msg.body,
-        expandedMessage: 'Não esqueça de efetuar uma colaboração :p',
         priority: 1,
         isClickable: true,
         buttons: msg.btnList
