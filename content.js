@@ -16,14 +16,14 @@ var ProjectNetwork = {
         //ProjectNetwork.RemoverAdsDeVideo();
         ProjectNetwork.VerificaExistenciaDeAnuncio();
         ProjectNetwork.AutoReplay.Iniciar();
-        ProjectNetwork.VerificaFlash()
+        ProjectNetwork.VerificarFlash()
         
     },
 
-    VerificaFlash : function() {
+    VerificarFlash : function() {
         var flash = document.querySelector("embed[type='application/x-shockwave-flash'][name='movie_player']")
 
-        if(flash != null)
+        if (flash != null) {
             ProjectNetwork.Socket.postMessage({
                 callback: "AbrirAlerta",
                 from: "VerificaFlash",
@@ -31,6 +31,11 @@ var ProjectNetwork = {
                 body: "Infelizmente o video atual é um flash, o YouTube Tools não conseguira exercer nenhuma ação!",
                 id: Date.now()
             });
+
+            return true;
+        }
+
+        return false;
     },
     /*
     * Adiciona ouvinte para executar acoes delegada da ENGINE
@@ -326,9 +331,10 @@ var ProjectNetwork = {
         * Constroi html do menu e retorna como string
         */
         _ObterHtmlMenu : function() {
-            var html = "<li>REPLAY</li>";
+            var html = "<li class='ativo'>REPLAY</li>";
             html += "<li>VERSAO</li>";
             html += "<li>SOBRE</li>";
+            html += "<li class='espaco-vazio'><span>a</span></li>";
             return html
         },
 
@@ -363,24 +369,26 @@ var ProjectNetwork = {
         */
         Toggle: function () {
             if (window.location.href.indexOf("youtube.com") > -1 && window.location.href.indexOf("/watch") > -1) {
-                var elemento = document.querySelector("#parent.projectnetwork");
-                var elemento2 = document.querySelector("#dialogo-mensagem.projectnetwork");
-                if (elemento.className.indexOf("aberto") == -1) {
-                    elemento.classList.add("animacao")
-                    elemento2.classList.add("animacao")
-
-
-                    setTimeout(function() {
-                        elemento.classList.add("aberto")
-                        elemento2.classList.add("aberto")
-                    }, 500)
-                } else {
-                    elemento.classList.remove("aberto")
-                    elemento2.classList.remove("aberto")
-                    setTimeout(function() {
+                if (!ProjectNetwork.VerificarFlash()) {
+                    var elemento = document.querySelector("#parent.projectnetwork");
+                    var elemento2 = document.querySelector("#dialogo-mensagem.projectnetwork");
+                    if (elemento.className.indexOf("aberto") == -1) {
                         elemento.classList.add("animacao")
                         elemento2.classList.add("animacao")
-                    }, 500)
+
+
+                        setTimeout(function() {
+                            elemento.classList.add("aberto")
+                            elemento2.classList.add("aberto")
+                        }, 500)
+                    } else {
+                        elemento.classList.remove("aberto")
+                        elemento2.classList.remove("aberto")
+                        setTimeout(function() {
+                            elemento.classList.add("animacao")
+                            elemento2.classList.add("animacao")
+                        }, 500)
+                    }
                 }
             } else {
                 ProjectNetwork.Socket.postMessage({

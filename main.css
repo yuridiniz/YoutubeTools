@@ -64,6 +64,10 @@ body div.projectnetwork#parent {
 /*
 * Estilo para menu de ferramentas
 */
+.projectnetwork#dialogo-mensagem #menu-ferramentas {
+    background: #444;
+}
+
 .projectnetwork#dialogo-mensagem #menu-ferramentas,
 .projectnetwork#dialogo-mensagem #menu-ferramentas li {
     list-style: none;
@@ -83,6 +87,23 @@ body div.projectnetwork#parent {
     border-left-width: 0px;
     font-weight: bold;
     font-size: 11px;
+}
+
+.projectnetwork#dialogo-mensagem #menu-ferramentas li.espaco-vazio,
+.projectnetwork#dialogo-mensagem #menu-ferramentas li.espaco-vazio:hover{
+    background: #444;
+    color: #444;
+    border-right-width: 0px;
+    border-left-width: 0px;
+    width: 165px;
+    cursor: default;
+}
+
+.projectnetwork#dialogo-mensagem #menu-ferramentas li.ativo,
+.projectnetwork#dialogo-mensagem #menu-ferramentas li.ativo:hover {
+    background: #555;
+    border-bottom-color: #555;
+    cursor: default;
 }
 
 .projectnetwork#dialogo-mensagem #menu-ferramentas li:hover{
