@@ -25,10 +25,10 @@ body div.projectnetwork#parent {
     position:fixed;
     z-index:9999999999;
     display: none;
-    bottom:20px;
-    right:20px;
     width:380px;
     height:153px;
+    bottom:20px;
+
 }
 
 /*
@@ -48,7 +48,7 @@ body div.projectnetwork#parent {
 .projectnetwork#parent.animacao{
     display:block;
     opacity:0;
-    -webkit-transform: rotateX(-50deg);
+    right:-380px;
     -webkit-transition: 0.2s;
 }
 
@@ -58,6 +58,7 @@ body div.projectnetwork#parent {
 .projectnetwork#dialogo-mensagem.aberto,
 .projectnetwork#parent.aberto{
     opacity:1;
+    right:20px;
     -webkit-transform: rotateX(0deg);
 }
 

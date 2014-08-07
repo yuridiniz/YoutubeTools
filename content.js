@@ -380,7 +380,7 @@ var ProjectNetwork = {
                         setTimeout(function() {
                             elemento.classList.add("aberto")
                             elemento2.classList.add("aberto")
-                        }, 500)
+                        }, 10)
                     } else {
                         elemento.classList.remove("aberto")
                         elemento2.classList.remove("aberto")
