@@ -2,37 +2,43 @@
 * Cria um ouvinte de mensagens, recebe as mensagens enviada pelos content_scripts e exibe o rich notification
 *
 */
-chrome.browserAction.onClicked.addListener(function(callback) {
-    chrome.tabs.query({ active: true, currentWindow: true }, function(tabs) {
-        chrome.tabs.sendMessage(tabs[0].id, { callback: "AutoReplay" }, function (response) {
-            console.log(response);
-        });
+var socket;
+
+chrome.runtime.onConnect.addListener(function (port) {
+    socket = port;
+    port.onMessage.addListener(function (msg) {
+        console.log(msg)
+
+        if (msg.status == 200) {
+            socket.postMessage("Conectado!")
+        }
+
+        if (msg.callback == "AbrirAlerta")
+            AbrirAlerta(msg);
+
+        if (msg.callback == "VerificarAtualizacao")
+            VerificarAtualizacao();
     });
+});
+
+
+chrome.browserAction.onClicked.addListener(function (callback) {
+    socket.postMessage({ callback: "AutoReplay" })
 });
 
 
 chrome.notifications.onButtonClicked.addListener(function(notfiId, btnIndex)
 {
-	if(btnIndex == 0)
+    if (btnIndex == 0)
 		chrome.tabs.create({ url: chrome.app.getDetails().update_url.toString().replace("update.xml","YoutubeTools.zip") });
 });
-
-chrome.runtime.onMessage.addListener(function(msg, sender) {
-
-console.log(msg)
-	if(msg.callBack == "AbrirAlerta")
-		AbrirAlerta(msg);
-		
-	if(msg.callBack == "VerificarAtualizacao")
-		VerificarAtualizacao();
-});
-
 
 
 var VerificarAtualizacao = function()
 {
 	chrome.runtime.requestUpdateCheck(function(status,versao)
 	{
+
 		if (status == "update_available") {
 		AtualizarYoutubeTools(versao)
 	  } else if (status == "no_update") {
@@ -45,7 +51,8 @@ var VerificarAtualizacao = function()
 
 var AtualizarYoutubeTools = function(versao)
 {
-	AbrirAlerta({
+    AbrirAlerta({
+        id:"NovaVersao",
 		from : "engine",
 		title : "Youtube tools",
 		body : "Ha uma versao mais recente disponivel: " + versao.version.toString(),
@@ -59,7 +66,9 @@ var AbrirAlerta = function(msg) {
     if (msg.id == undefined) msg.id = msg.from ;
     if(msg.body == undefined) return;
     if(msg.title == undefined) return;
-	if(msg.btnList == undefined) msg.btnList = [];
+    if (msg.btnList == undefined) msg.btnList = [];
+
+	msg.id = msg.id.toString()
 
     chrome.notifications.create(msg.id, {
         type: 'basic',

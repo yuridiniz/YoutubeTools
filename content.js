@@ -5,24 +5,41 @@
 
 "use strict"
 var ProjectNetwork = {
-
+    Socket : null,
     /*
     * Inicia todo o funcionamento
     */
-    Iniciar : function() {
+    Iniciar: function () {
+        ProjectNetwork.AdicionarOuvinte()
         ProjectNetwork.InserirStyleSheet();
         ProjectNetwork.VerificarAtualizacao();
-        ProjectNetwork.RemoverAdsDeVideo();
+        //ProjectNetwork.RemoverAdsDeVideo();
         ProjectNetwork.VerificaExistenciaDeAnuncio();
         ProjectNetwork.AutoReplay.Iniciar();
-        ProjectNetwork.AdicionarOuvinte()
+        ProjectNetwork.VerificaFlash()
+        
     },
 
+    VerificaFlash : function() {
+        var flash = document.querySelector("embed[type='application/x-shockwave-flash'][name='movie_player']")
+
+        if(flash != null)
+            ProjectNetwork.Socket.postMessage({
+                callback: "AbrirAlerta",
+                from: "VerificaFlash",
+                title: "Video em flash",
+                body: "Infelizmente o video atual é um flash, o YouTube Tools não conseguira exercer nenhuma ação!",
+                id: Date.now()
+            });
+    },
     /*
     * Adiciona ouvinte para executar acoes delegada da ENGINE
     */
-    AdicionarOuvinte : function() {
-        chrome.runtime.onMessage.addListener(function (msg, sender) {
+    AdicionarOuvinte: function () {
+        ProjectNetwork.Socket = chrome.runtime.connect({ name: "knockknock" });
+        ProjectNetwork.Socket.postMessage({ status: 200, mensagem: "Conectado com sucesso" });
+
+        ProjectNetwork.Socket.onMessage.addListener(function (msg) {
             console.log(msg)
             if (msg.callback == undefined) return;
 
@@ -51,12 +68,9 @@ var ProjectNetwork = {
     * Metodo necessario enquanto estiver na versao fora do Chrome Web Store
     */
     VerificarAtualizacao: function () {
-
-        chrome.runtime.sendMessage({
-            callBack: "VerificarAtualizacao",
-            from: "executarClick",
-            title: "Ads removido",
-            body: "Ads do youtube acabou de ser removido"
+        ProjectNetwork.Socket.postMessage({
+            callback: "VerificarAtualizacao",
+            from: "executarClick"
         });
     },
 
@@ -98,7 +112,7 @@ var ProjectNetwork = {
                         return;
                     } else {
 
-                        executarClick();
+                        ProjectNetwork.RemoverVideoAnuncio();
                         if (document.querySelector(".videoAdUi") == null) {
                             setTimeout(function () {
                                 ProjectNetwork.VerificaExistenciaDeAnuncio();
@@ -158,13 +172,16 @@ var ProjectNetwork = {
             video.volume = video.volumeEditavel;
             console.log("%cremovido", "color:green");
 
-            chrome.runtime.sendMessage({
-                callBack: "AbrirAlerta",
+            ProjectNetwork.Socket.postMessage({
+                callback: "AbrirAlerta",
                 from: "executarClick",
                 title: "Ads removido",
                 body: "Ads do youtube acabou de ser removido",
                 id: Date.now()
             });
+
+            console.log("%cExibindo mensagem...", "color:green");
+            
         }
     },
 
@@ -366,8 +383,8 @@ var ProjectNetwork = {
                     }, 500)
                 }
             } else {
-                chrome.runtime.sendMessage({
-                    callBack: "AbrirAlerta",
+                ProjectNetwork.Socket.postMessage({
+                    callback: "AbrirAlerta",
                     from: "autoReplay",
                     title: "Video não encontrado",
                     body: "Não e possivel abrir o painel para essa pagina"
