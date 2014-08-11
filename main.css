@@ -13,6 +13,9 @@
 * Todo conteudo a baixo deve ser comentado
 */
 
+body div.projectnetwork ::-webkit-input-placeholder {
+   color: #DADADA;
+}
 
 /*
 * Estilo do content de tudo
@@ -27,8 +30,7 @@ body div.projectnetwork#parent {
     display: none;
     width:380px;
     height:153px;
-    bottom:20px;
-
+    bottom: 20px;
 }
 
 /*
@@ -109,7 +111,10 @@ body div.projectnetwork#parent {
 
 .projectnetwork#dialogo-mensagem #menu-ferramentas li:hover{
     background: #4797D6;
+}
 
+.projectnetwork#dialogo-mensagem #menu-ferramentas li.fechar:hover{
+    background: #D64747;
 }
 
 .projectnetwork#dialogo-mensagem #menu-ferramentas li:first-child {
@@ -119,7 +124,6 @@ body div.projectnetwork#parent {
 
 .projectnetwork#dialogo-mensagem #menu-ferramentas li:last-child{
 }
-
 
 
 /*

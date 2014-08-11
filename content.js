@@ -13,13 +13,28 @@ var ProjectNetwork = {
         ProjectNetwork.AdicionarOuvinte()
         ProjectNetwork.InserirStyleSheet();
         //ProjectNetwork.VerificarAtualizacao();
-        //ProjectNetwork.RemoverAdsDeVideo();
+        ProjectNetwork.RemoverAdsDeVideo();
         ProjectNetwork.VerificaExistenciaDeAnuncio();
         ProjectNetwork.AutoReplay.Iniciar();
         ProjectNetwork.VerificarFlash()
+
+        window.onbeforeunload = ProjectNetwork.Eventos.OnBeforeUnload;
+
+        setTimeout(function () {
+            ProjectNetwork.AutoReplay.Toggle(true);
+        }, 1000)
         
     },
 
+    Eventos : {
+        OnBeforeUnload : function(e) {
+            ProjectNetwork.AutoReplay.Fechar()
+        }
+    },
+
+    /*
+    * Verifica se o vídeo é em flash ou HTML5
+    */
     VerificarFlash : function() {
         var flash = document.querySelector("embed[type='application/x-shockwave-flash'][name='movie_player']")
 
@@ -37,6 +52,7 @@ var ProjectNetwork = {
 
         return false;
     },
+
     /*
     * Adiciona ouvinte para executar acoes delegada da ENGINE
     */
@@ -239,7 +255,6 @@ var ProjectNetwork = {
             menu.id = "menu-ferramentas";
             menu.classList.add("projectnetwork");
             div.appendChild(menu)
-
             menu.innerHTML = self._ObterHtmlMenu();
 
             var conteudo1 = document.createElement("div");
@@ -247,12 +262,9 @@ var ProjectNetwork = {
             conteudo1.classList.add("projectnetwork");
             conteudo1.classList.add("conteudo-ferramentas");
             div.appendChild(conteudo1)
-
             conteudo1.innerHTML = self._ObterHtmlReplay();
 
-            var botao = conteudo1.querySelector("#projectnetwork-replay-button");
-
-            botao.addEventListener("click", function() {
+            conteudo1.querySelector("#projectnetwork-replay-button").addEventListener("click", function() {
                 try {
                     var inicio = document.querySelector("#projectnetwork-ini-video").value;
                     var fim = document.querySelector("#projectnetwork-fim-video").value;
@@ -287,6 +299,25 @@ var ProjectNetwork = {
                     }
 
                     if (this.className.indexOf("ativo") == -1) {
+
+                        var video = document.querySelector(".html5-main-video");
+                        var fimVideo = "00:00";
+
+                        if (video != null && !isNaN(video.duration * 1)) {
+                            fimVideo = video.duration * 1000;
+                            var data = new Date(Date.parse("1/1/2000 0:0") + fimVideo);
+                            var hora = data.getHours() < 10 ? "0" + data.getHours() : data.getHours()
+                            var minutos = data.getMinutes() < 10 ? "0" + data.getMinutes() : data.getMinutes()
+                            var seg = data.getSeconds() < 10 ? "0" + data.getSeconds() : data.getSeconds()
+
+                            if (data.getHours() > 0)
+                                fimVideo = hora + ":" + minutos + ":" + seg
+                            else 
+                                fimVideo = minutos + ":" + seg
+
+                            document.querySelector("#projectnetwork-fim-video").setAttribute("placeholder", fimVideo)
+                        }
+
                         document.querySelector("#projectnetwork-ini-video").disabled = true;
                         document.querySelector("#projectnetwork-fim-video").disabled = true;
                         window.intervaloReplay = setInterval(function() {
@@ -302,6 +333,8 @@ var ProjectNetwork = {
                         document.querySelector("#projectnetwork-ini-video").disabled = false;
                         document.querySelector("#projectnetwork-fim-video").disabled = false;
                         this.classList.remove("ativo")
+
+                        document.querySelector("#projectnetwork-fim-video").setAttribute("placeholder", "00:00")
                     }
                 } catch (erro) {
                     chrome.runtime.sendMessage({
@@ -312,7 +345,9 @@ var ProjectNetwork = {
                     });
                 }
             },false);
-
+            menu.querySelector("li.fechar").addEventListener("click", function() {
+                ProjectNetwork.AutoReplay.Toggle();
+            }, false)
 
             var conteudo2 = document.createElement("div");
             conteudo2.id = "conteudo2-ferramentas";
@@ -334,25 +369,29 @@ var ProjectNetwork = {
             var html = "<li class='ativo'>REPLAY</li>";
             html += "<li>VERSÃO</li>";
             html += "<li>SOBRE</li>";
-            html += "<li class='espaco-vazio'><span>a</span></li>";
+            html += "<li class='espaco-vazio' style='width: 135px;'><span>a</span></li>";
+            html += "<li class='fechar' style='border-left-width:1px'>X</li>";
             return html
         },
 
         /*
         * Constroi html do conteudo 'Replay' e retorna como string
         */
-        _ObterHtmlReplay : function() {
+        _ObterHtmlReplay: function () {
+
+            
+
             var html = "<div class='col-3'>";
             html += "<span class='projectnetwork-input-label'> Inicio do vídeo </span>";
             html += "</div>";
             html += "<div class='col-7'>";
-            html += "<input id='projectnetwork-ini-video' class='projectnetwork-input-val' />";
+            html += "<input placeholder='00:00' id='projectnetwork-ini-video' class='projectnetwork-input-val' />";
             html += "</div>";
             html += "<div class='col-3'>";
             html += "<span class='projectnetwork-input-label'> Final do vídeo </span>";
             html += "</div>";
             html += "<div class='col-7'>";
-            html += "<input id='projectnetwork-fim-video' class='projectnetwork-input-val' />";
+            html += "<input placeholder='00:00' id='projectnetwork-fim-video' class='projectnetwork-input-val' />";
             html += "</div>";
             html += "<div class='col-3'>";
             html += '<span class="projectnetwork-input-label"></span>';
@@ -367,7 +406,8 @@ var ProjectNetwork = {
         /*
         * Abre o dialogo de ferramentas
         */
-        Toggle: function () {
+        Toggle: function (loadPage) {
+            
             if (window.location.href.indexOf("youtube.com") > -1 && window.location.href.indexOf("/watch") > -1) {
                 if (!ProjectNetwork.VerificarFlash()) {
                     var elemento = document.querySelector("#parent.projectnetwork");
@@ -376,21 +416,16 @@ var ProjectNetwork = {
                         elemento.classList.add("animacao")
                         elemento2.classList.add("animacao")
 
-
                         setTimeout(function() {
                             elemento.classList.add("aberto")
                             elemento2.classList.add("aberto")
-                        }, 10)
+                        }, 100)
                     } else {
-                        elemento.classList.remove("aberto")
-                        elemento2.classList.remove("aberto")
-                        setTimeout(function() {
-                            elemento.classList.add("animacao")
-                            elemento2.classList.add("animacao")
-                        }, 500)
+                        ProjectNetwork.AutoReplay.Fechar()
                     }
                 }
-            } else {
+            } else if(loadPage != true){
+                
                 ProjectNetwork.Socket.postMessage({
                     callback: "AbrirAlerta",
                     from: "autoReplay",
@@ -400,6 +435,19 @@ var ProjectNetwork = {
 
             }
         },
+
+
+        Fechar: function () {
+            var elemento = document.querySelector("#parent.projectnetwork");
+            var elemento2 = document.querySelector("#dialogo-mensagem.projectnetwork");
+
+            elemento.classList.remove("aberto")
+            elemento2.classList.remove("aberto")
+            setTimeout(function () {
+                elemento.classList.add("animacao")
+                elemento2.classList.add("animacao")
+            }, 500)
+        }
 
     }
 

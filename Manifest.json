@@ -1,11 +1,13 @@
-﻿{   "name": "Youtube™ Tools",
-    "version": "0.9.33",
+﻿{   "name": "Youtube™ Replay",
+    "version": "0.9.34",
     "manifest_version": 2,
 	"author": "Project Network - Desenvolvimento de Softwares",
-	"description": "Remove os Ads do Youtube™ durante o vídeo e os exibidos antes do vídeo iniciar",
+	"description": "Adiciona ferramenta de replay ao Youtube™, Remove os Ads do Youtube™ durante o vídeo e os exibidos antes do vídeo iniciar",
 	"permissions": [
-		"notifications",
-		"http://*/*"
+		"notifications",      
+		"tabs",
+		"http://*/*",
+		"https://*/*"
 	  ],
 	"content_scripts": [ {
         "matches": [

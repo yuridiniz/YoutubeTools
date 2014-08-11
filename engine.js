@@ -2,7 +2,7 @@
 * Cria um ouvinte de mensagens, recebe as mensagens enviada pelos content_scripts e exibe o rich notification
 *
 */
-var socket;
+var socket = null;
 
 chrome.runtime.onConnect.addListener(function (port) {
     socket = port;
@@ -23,6 +23,23 @@ chrome.runtime.onConnect.addListener(function (port) {
 
 
 chrome.browserAction.onClicked.addListener(function (callback) {
+    console.log({"socket" : socket})
+
+    if (socket == null) {
+        //Executa o script nas paginas que ja foram carregadas
+        chrome.tabs.query({ url: "http://*/*" }, function(tabs) {
+            for (var i = 0; i < tabs.length; i++) {
+                chrome.tabs.executeScript(tabs[i].id, { file: "content.js" }, function() {});
+            }
+        });
+
+        chrome.tabs.query({ url: "https://*/*" }, function(tabs) {
+            for (var i = 0; i < tabs.length; i++) {
+                chrome.tabs.executeScript(tabs[i].id, { file: "content.js" }, function() {});
+            }
+        });
+    }
+
     socket.postMessage({ callback: "AutoReplay" })
 });
 
