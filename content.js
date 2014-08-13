@@ -6,24 +6,28 @@
 "use strict"
 var ProjectNetwork = {
     Socket : null,
+	
     /*
     * Inicia todo o funcionamento
     */
     Iniciar: function () {
         ProjectNetwork.AdicionarOuvinte()
-        ProjectNetwork.InserirStyleSheet();
+
         //ProjectNetwork.VerificarAtualizacao();
-        ProjectNetwork.RemoverAdsDeVideo();
-        ProjectNetwork.VerificaExistenciaDeAnuncio();
-        ProjectNetwork.AutoReplay.Iniciar();
-        ProjectNetwork.VerificarFlash()
+		 if (window.location.href.indexOf("youtube.com") > -1) {
+			 ProjectNetwork.InserirStyleSheet();
+			ProjectNetwork.RemoverAdsDeVideo();
+			ProjectNetwork.VerificaExistenciaDeAnuncio();
+			ProjectNetwork.AutoReplay.Iniciar();
+			ProjectNetwork.VerificarFlash()
 
-        window.onbeforeunload = ProjectNetwork.Eventos.OnBeforeUnload;
+			window.onbeforeunload = ProjectNetwork.Eventos.OnBeforeUnload;
+			
+			setTimeout(function () {
+				ProjectNetwork.AutoReplay.Toggle(true);
+			}, 1000)
+		}
 
-        setTimeout(function () {
-            ProjectNetwork.AutoReplay.Toggle(true);
-        }, 1000)
-        
     },
 
     Eventos : {
