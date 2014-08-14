@@ -3,7 +3,6 @@
 * desenvolvido por Yuri Araujo
 */
 
-"use strict"
 var ProjectNetwork = {
     Socket : null,
 	
@@ -13,6 +12,8 @@ var ProjectNetwork = {
     Iniciar: function () {
         ProjectNetwork.AdicionarOuvinte()
 
+        console.log("Testando")
+
         //ProjectNetwork.VerificarAtualizacao();
 		 if (window.location.href.indexOf("youtube.com") > -1) {
 			 ProjectNetwork.InserirStyleSheet();
@@ -21,8 +22,11 @@ var ProjectNetwork = {
 			ProjectNetwork.AutoReplay.Iniciar();
 			ProjectNetwork.VerificarFlash()
 
-			window.onbeforeunload = ProjectNetwork.Eventos.OnBeforeUnload;
-			
+			with(ProjectNetwork.Eventos) {
+			    window.onbeforeunload = OnBeforeUnload;
+			    document.querySelector(".html5-main-video").onplaying = OnVideoPlaying;
+			}
+
 			setTimeout(function () {
 				ProjectNetwork.AutoReplay.Toggle(true);
 			}, 1000)
@@ -33,6 +37,15 @@ var ProjectNetwork = {
     Eventos : {
         OnBeforeUnload : function(e) {
             ProjectNetwork.AutoReplay.Fechar()
+        },
+        OnVideoPlaying: function (e) {
+            ProjectNetwork.Socket.postMessage({
+                callback: "AbrirAlerta",
+                from: "Tocando",
+                title: "Youtube™ Tools BETA DEVELOPER",
+                body: "Video iniciado",
+                id: "IniciandoVideo"
+            });
         }
     },
 
