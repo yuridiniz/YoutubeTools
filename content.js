@@ -4,15 +4,14 @@
 */
 
 var ProjectNetwork = {
-    Socket : null,
-	
+    Socket: null,
+    Audio: null,
+
     /*
     * Inicia todo o funcionamento
     */
     Iniciar: function () {
         ProjectNetwork.AdicionarOuvinte()
-
-        console.log("Testando")
 
         //ProjectNetwork.VerificarAtualizacao();
 		 if (window.location.href.indexOf("youtube.com") > -1) {
@@ -21,7 +20,7 @@ var ProjectNetwork = {
 			ProjectNetwork.VerificaExistenciaDeAnuncio();
 			ProjectNetwork.AutoReplay.Iniciar();
 			ProjectNetwork.VerificarFlash()
-
+			console.log(document.querySelector(".html5-main-video").volume)
 			with(ProjectNetwork.Eventos) {
 			    window.onbeforeunload = OnBeforeUnload;
 			    document.querySelector(".html5-main-video").onplaying = OnVideoPlaying;
@@ -44,7 +43,7 @@ var ProjectNetwork = {
                 from: "Tocando",
                 title: "Youtube™ Tools BETA DEVELOPER",
                 body: "Video iniciado",
-                id: "IniciandoVideo"
+                id: Date.now()
             });
         }
     },
@@ -174,8 +173,8 @@ var ProjectNetwork = {
     RemoverVideoAnuncio: function () {
         var video = document.querySelector(".html5-main-video");
 
-        if (video.volumeEditavel == null) {
-            video.volumeEditavel = video.volume;
+        if (ProjectNetwork.Audio == null) {
+            ProjectNetwork.Audio = video.volume;
             video.volume = 0;
         }
 
@@ -207,7 +206,7 @@ var ProjectNetwork = {
             }, 100);
         } else {
             video.style.opacity = 1
-            video.volume = video.volumeEditavel;
+            video.volume = ProjectNetwork.Audio;
             console.log("%cremovido", "color:green");
 
             ProjectNetwork.Socket.postMessage({
